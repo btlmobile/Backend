@@ -16,7 +16,11 @@ EXPIRE_MINUTES = int(jwt_cfg.get("expire_minutes", 60))
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
 
 
-def create_access_token(subject: str, expires_delta: Optional[timedelta] = None, extra_claims: Optional[Dict[str, Any]] = None) -> str:
+def create_access_token(
+    subject: str,
+    expires_delta: Optional[timedelta] = None,
+    extra_claims: Optional[Dict[str, Any]] = None,
+) -> str:
     expire = datetime.now(UTC) + (expires_delta or timedelta(minutes=EXPIRE_MINUTES))
     to_encode = {"sub": subject, "exp": expire}
     if extra_claims:
@@ -33,13 +37,19 @@ def verify_token(token: str) -> Optional[dict]:
         return None
 
 
-def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
+def get_current_user(
+    token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)
+):
     payload = verify_token(token)
     if not payload or "sub" not in payload:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="invalid_token")
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED, detail="invalid_token"
+        )
     username = payload["sub"]
     repo = UserRepository(db)
     user = repo.get_by_username(username)
     if not user or getattr(user, "is_active", False) is False:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="inactive_or_not_found")
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED, detail="inactive_or_not_found"
+        )
     return user

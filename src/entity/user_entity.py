@@ -1,22 +1,6 @@
-import os
-from typing import Optional
-from datetime import datetime
-
-try:
-    from redis_om import HashModel, Field
-except Exception:
-    HashModel = object
-    Field = lambda *a, **k: None
-
-
-from src.service.redis_service import RedisService
-
-def _get_redis_connection():
-    return RedisService.get_redis_om_connection()
-
-
 from sqlalchemy import Column, String, Boolean, DateTime, Integer, func
 from src.config.db_dev import Base
+
 
 class UserEntity(Base):
     __tablename__ = "users"
@@ -38,4 +22,3 @@ class UserEntity(Base):
             "is_active": self.is_active,
             "created_at": self.created_at.isoformat() if self.created_at else None,
         }
-

@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 from src.entity.user_entity import UserEntity
 from src.constant.role import Role, get_role_level
 
+
 class UserRepository:
     def __init__(self, db: Session):
         self.db = db
@@ -13,7 +14,14 @@ class UserRepository:
     def get_by_email(self, email: str) -> Optional[UserEntity]:
         return self.db.query(UserEntity).filter(UserEntity.email == email).first()
 
-    def create_user(self, username: str, email: str, full_name: Optional[str], hashed_password: str, role: Role = Role.USER) -> UserEntity:
+    def create_user(
+        self,
+        username: str,
+        email: str,
+        full_name: Optional[str],
+        hashed_password: str,
+        role: Role = Role.USER,
+    ) -> UserEntity:
         user = UserEntity(
             username=username,
             email=email,

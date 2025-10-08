@@ -1,12 +1,18 @@
 from typing import Tuple, Optional
 from passlib.context import CryptContext
 from src.model.req.auth_req import RegisterReq, LoginReq
-from src.constant.message.auth_message import SUCCESS, USER_EXISTS, INVALID_CREDENTIALS, VALIDATION_ERROR
+from src.constant.message.auth_message import (
+    SUCCESS,
+    USER_EXISTS,
+    INVALID_CREDENTIALS,
+    VALIDATION_ERROR,
+)
 from src.repository.UserRepository import UserRepository
 from src.helper.jwt_helper import create_access_token
-from src.constant.role import Role, get_role_level
+from src.constant.role import Role
 
 pwd_context = CryptContext(schemes=["pbkdf2_sha256", "bcrypt"], deprecated="auto")
+
 
 class AuthService:
     def __init__(self, repo: UserRepository):
@@ -46,7 +52,9 @@ class AuthService:
             "role": getattr(user, "role", "user"),
             "role_level": getattr(user, "role_level", 10),
         }
-        access_token = create_access_token(subject=user.username, extra_claims=extra_claims)
+        access_token = create_access_token(
+            subject=user.username, extra_claims=extra_claims
+        )
         return SUCCESS, {
             "access_token": access_token,
             "token_type": "bearer",
@@ -69,7 +77,9 @@ class AuthService:
             "role": getattr(user, "role", "user"),
             "role_level": getattr(user, "role_level", 10),
         }
-        access_token = create_access_token(subject=payload.username, extra_claims=extra_claims)
+        access_token = create_access_token(
+            subject=payload.username, extra_claims=extra_claims
+        )
         return SUCCESS, {
             "access_token": access_token,
             "token_type": "bearer",

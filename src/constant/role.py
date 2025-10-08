@@ -18,4 +18,3 @@ def get_role_level(role: str) -> int:
     except Exception:
         r = Role.USER
     return ROLE_LEVEL[r]
-

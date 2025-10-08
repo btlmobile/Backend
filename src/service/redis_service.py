@@ -19,7 +19,9 @@ class RedisService:
             host = cls._config.get("host") or "localhost"
             port = int(cls._config.get("port", 6379))
             password = cls._config.get("password")
-            cls._client = Redis(host=host, port=port, password=password, decode_responses=True)
+            cls._client = Redis(
+                host=host, port=port, password=password, decode_responses=True
+            )
         return cls._client
 
     @classmethod
@@ -27,4 +29,6 @@ class RedisService:
         host = cls._config.get("host") or "localhost"
         port = int(cls._config.get("port", 6379))
         password = cls._config.get("password")
-        return get_redis_connection(host=host, port=port, password=password, decode_responses=True)
+        return get_redis_connection(
+            host=host, port=port, password=password, decode_responses=True
+        )

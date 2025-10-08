@@ -6,13 +6,14 @@ from src.helper.jwt_helper import verify_token
 from src.model.res.result_res import ResultRes
 
 
-class HealthAdminMiddleware(BaseHTTPMiddleware):
+class ApiAuthMiddleware(BaseHTTPMiddleware):
     async def dispatch(
         self, request: Request, call_next: RequestResponseEndpoint
     ) -> Response:
         path = request.url.path
-        if not path.startswith("/health"):
+        if not path.startswith("/api/"):
             return await call_next(request)
+
         auth_header = request.headers.get("Authorization", "")
         if not auth_header.startswith("Bearer "):
             res = ResultRes(
@@ -22,6 +23,7 @@ class HealthAdminMiddleware(BaseHTTPMiddleware):
                 timeStamp=datetime.now(UTC).isoformat(),
             )
             return JSONResponse(status_code=401, content=res.model_dump())
+
         token = auth_header.split(" ", 1)[1]
         payload = verify_token(token)
         if not payload:
@@ -32,9 +34,10 @@ class HealthAdminMiddleware(BaseHTTPMiddleware):
                 timeStamp=datetime.now(UTC).isoformat(),
             )
             return JSONResponse(status_code=401, content=res.model_dump())
-        role = payload.get("role")
+
         role_level = payload.get("role_level")
-        if role != "admin" and role_level != 1:
+
+        if role_level is None or role_level < 0:
             res = ResultRes(
                 isSuccess=False,
                 errorCode="forbidden",
@@ -42,4 +45,5 @@ class HealthAdminMiddleware(BaseHTTPMiddleware):
                 timeStamp=datetime.now(UTC).isoformat(),
             )
             return JSONResponse(status_code=403, content=res.model_dump())
+
         return await call_next(request)
