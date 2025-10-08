@@ -25,7 +25,7 @@ def export_swagger():
     }
     openapi_schema["security"] = [{"BearerAuth": []}]
     
-    swagger_dir = Path("../swagger")
+    swagger_dir = Path("../docs")
     swagger_dir.mkdir(exist_ok=True)
     
     json_file = swagger_dir / "openapi.json"
