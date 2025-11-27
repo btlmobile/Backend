@@ -1,0 +1,3 @@
+AUTH_DEFAULT_SECRET = "supersecret"
+AUTH_JWT_ALG = "HS256"
+

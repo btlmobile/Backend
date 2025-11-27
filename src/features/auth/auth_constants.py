@@ -1,0 +1,3 @@
+AUTH_DEMO_USERNAME = "demouser"
+AUTH_DEMO_PASSWORD = "demopass123"
+

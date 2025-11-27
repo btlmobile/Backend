@@ -1,0 +1,11 @@
+from fastapi import FastAPI
+
+from src.features.auth.auth_route import create_router
+
+
+def register_feature(app: FastAPI) -> None:
+    app.include_router(create_router())
+
+
+__all__ = ["register_feature"]
+

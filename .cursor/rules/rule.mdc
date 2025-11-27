@@ -1,0 +1,37 @@
+---
+alwaysApply: true
+---
+
+# Cấm tuyệt đối:
+- cấm tuyệt đối comment trong code, cấm tuyệt đối comment tiếng việt
+- cấm tuyệt đối text icon
+- cấm tuyệt đối hàm logic quá dài
+- cấm tuyệt đối __init__.py, trừ khi user yêu cầu, trừ khi được phép.
+- cấm tuyệt đối magic number, magic string.
+
+# Tuân thủ tuyệt đối:
+- luôn import ở đâu file
+- hàm private (_func) luôn nằm dưới hàm public (func)
+- không cần viết test, đừng bao giờ viết test.
+- cách service, class, ... luôn dùng singleton
+- ưu tiên làm việc đơn giản, trình bày đơn giản tránh phức tạp nhất có thể.
+- ưu tiên dùng Result Tuple pattern trong logic.
+
+---
+
+# Chú thích
+## Pattern: **Result Tuple**
+
+Một hàm trả về **(result, error)**.
+Caller chỉ cần kiểm tra `error`.
+Dạng “error-as-value”.
+
+```
+from hàm → (kết_quả, lỗi)
+                 ↓
+          nếu lỗi → xử lý
+          nếu ok  → dùng kết_quả
+```
+
+**Ưu điểm:** đơn giản, rõ ràng, không dùng exception flow.
+**Nhược:** dễ quên check error, không bắt buộc bởi compiler.
