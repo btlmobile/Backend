@@ -1,13 +1,22 @@
 services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: backend-prod
+    ports:
+      - "38000:38000"
+    environment:
+      - REDIS_URL=redis://redis:6379/0
+    restart: unless-stopped
+
   ngrok:
     image: ngrok/ngrok:alpine
     container_name: ngrok-prod
-    command: http host.docker.internal:38000
+    command: http backend:38000
     environment:
       NGROK_AUTHTOKEN: "36DygghEZn9p90Hgvv6gamIAtqA_66mN4x94ruHhmT82S5RHD"
     ports:
       - "4040:4040"
     restart: unless-stopped
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
 
