@@ -14,7 +14,7 @@ def create_app() -> FastAPI:
         title="Backend API",
         version="0.1.0",
         description=(
-            "# Backend API Documentationnn\n\n"
+            "# Backend API Documentation\n\n"
             "API backend cho ứng dụng quản lý bottle messages.\n\n"
             "## Tính năng chính\n\n"
             "### Authentication\n"
