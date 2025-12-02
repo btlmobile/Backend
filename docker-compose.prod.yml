@@ -8,6 +8,8 @@ services:
       - "38000:38000"
     environment:
       - REDIS_URL=redis://redis:6379/0
+    volumes:
+      - ./src:/workspace/src
     restart: unless-stopped
 
   ngrok:
