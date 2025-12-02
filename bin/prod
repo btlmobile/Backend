@@ -7,3 +7,10 @@ docker compose \
   -f docker-compose.yml \
   -f docker-compose.prod.yml \
   up --build -d
+
+(
+  while true; do
+    sleep 120
+    git pull
+  done
+) &
