@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from fastapi import FastAPI, Request, status
+from fastapi import FastAPI, HTTPException, Request, status
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 from redis_om.model.model import NotFoundError
@@ -17,6 +17,7 @@ def register_middlewares(app: FastAPI) -> None:
     app.add_middleware(ExceptionHandlerMiddleware)
     app.add_middleware(ApiAuthMiddleware)
     app.add_exception_handler(RequestValidationError, handle_validation_error)
+    app.add_exception_handler(HTTPException, handle_http_exception)
 
 
 class ExceptionHandlerMiddleware(BaseHTTPMiddleware):
@@ -38,27 +39,27 @@ class ApiAuthMiddleware(BaseHTTPMiddleware):
         if request.url.path.startswith("/api"):
             auth_header = request.headers.get("Authorization")
             if not auth_header or not auth_header.startswith("Bearer "):
-                return JSONResponse(
-                    {"error": "auth_missing_token"},
-                    status_code=status.HTTP_401_UNAUTHORIZED,
-                )
+                return _build_json_response(status.HTTP_401_UNAUTHORIZED, "auth_missing_token")
             token = auth_header.split(" ", 1)[1]
             try:
                 self._token_helper.verify(token)
             except ValueError as exc:
-                return JSONResponse(
-                    {"error": str(exc)},
-                    status_code=status.HTTP_401_UNAUTHORIZED,
-                )
+                return _build_json_response(status.HTTP_401_UNAUTHORIZED, str(exc))
         return await call_next(request)
 
 
 def _build_json_response(status_code: int, error_code: str) -> JSONResponse:
-    payload = {"error": error_code}
+    payload = {"error_msg": error_code}
     return JSONResponse(content=payload, status_code=status_code)
 
 
 async def handle_validation_error(request: Request, exc: RequestValidationError) -> JSONResponse:
-    payload = {"error": "invalid_payload", "message": "Payload không hợp lệ"}
+    payload = {"error_msg": "invalid_payload"}
     return JSONResponse(content=payload, status_code=status.HTTP_400_BAD_REQUEST)
+
+
+async def handle_http_exception(request: Request, exc: HTTPException) -> JSONResponse:
+    error_msg = exc.detail if isinstance(exc.detail, str) else str(exc.detail)
+    payload = {"error_msg": error_msg}
+    return JSONResponse(content=payload, status_code=exc.status_code)
 

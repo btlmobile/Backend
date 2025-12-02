@@ -1,0 +1,12 @@
+from fastapi import status
+
+BOTTLE_NOT_FOUND_ERROR = "bottle_not_found"
+STORED_BOTTLE_NOT_FOUND_ERROR = "stored_bottle_not_found"
+STORED_BOTTLE_ALREADY_EXISTS_ERROR = "stored_bottle_already_exists"
+
+BOTTLE_ERROR_STATUS = {
+    BOTTLE_NOT_FOUND_ERROR: status.HTTP_404_NOT_FOUND,
+    STORED_BOTTLE_NOT_FOUND_ERROR: status.HTTP_404_NOT_FOUND,
+    STORED_BOTTLE_ALREADY_EXISTS_ERROR: status.HTTP_409_CONFLICT,
+}
+
