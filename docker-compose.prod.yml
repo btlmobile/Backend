@@ -17,7 +17,7 @@ services:
     container_name: ngrok-prod
     command: http backend:38000
     environment:
-      NGROK_AUTHTOKEN: "36DygghEZn9p90Hgvv6gamIAtqA_66mN4x94ruHhmT82S5RHD"
+      NGROK_AUTHTOKEN: "2vYjT5j40edREjK6Qbpysfr5TyK_4qhEj643Y4rxNCHoM1wPo"
     ports:
       - "4040:4040"
     restart: unless-stopped
