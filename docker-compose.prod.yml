@@ -4,8 +4,6 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: backend-prod
-    ports:
-      - "38000:38000"
     environment:
       - REDIS_URL=redis://redis:6379/0
     volumes:
