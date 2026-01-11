@@ -13,7 +13,17 @@ from src.shared.constants.error_message import (
 from src.shared.helpers.tokens import TokenHelper
 
 
+from fastapi.middleware.cors import CORSMiddleware
+
+
 def register_middlewares(app: FastAPI) -> None:
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=["*"],
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
     app.add_middleware(ExceptionHandlerMiddleware)
     app.add_middleware(ApiAuthMiddleware)
     app.add_exception_handler(RequestValidationError, handle_validation_error)
