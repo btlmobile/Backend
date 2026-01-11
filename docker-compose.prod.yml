@@ -4,11 +4,13 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: backend-prod
+    ports:
+      - "127.0.0.1:38000:38000"  # Exposed only on localhost for testing
     environment:
       - REDIS_URL=redis://redis:6379/0
     volumes:
       - ./src:/workspace/src
-    restart: unless-stopped
+    restart: always
 
   ngrok:
     image: ngrok/ngrok:alpine
@@ -16,5 +18,5 @@ services:
     command: http backend:38000
     environment:
       NGROK_AUTHTOKEN: "37vKMS2Tq4jWuX8pxKfDCv3ZXPS_2HLrS9jaYFb33a3ycLWxr"
-    restart: unless-stopped
+    restart: always
 

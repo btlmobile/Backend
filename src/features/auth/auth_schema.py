@@ -7,14 +7,12 @@ from src.features.auth.auth_constants import AUTH_DEMO_PASSWORD, AUTH_DEMO_USERN
 
 class AuthRegisterRequest(BaseModel):
     username: str = Field(
-        default=AUTH_DEMO_USERNAME,
         description="Tên đăng nhập (6-12 ký tự, không có ký tự đặc biệt)",
         examples=["user123"],
         min_length=6,
         max_length=12,
     )
     password: str = Field(
-        default=AUTH_DEMO_PASSWORD,
         description="Mật khẩu (6-12 ký tự, không có ký tự đặc biệt)",
         examples=["pass123"],
         min_length=6,
@@ -36,12 +34,10 @@ class AuthRegisterResponse(BaseModel):
 
 class AuthLoginRequest(BaseModel):
     username: str = Field(
-        default=AUTH_DEMO_USERNAME,
         description="Tên đăng nhập",
         examples=["user123"],
     )
     password: str = Field(
-        default=AUTH_DEMO_PASSWORD,
         description="Mật khẩu",
         examples=["pass123"],
     )

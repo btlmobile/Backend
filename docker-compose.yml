@@ -4,10 +4,6 @@ services:
   redis:
     image: redis/redis-stack:latest
     container_name: redis
-    ports:
-      - "6379:6379"
-      - "8001:8001"
-    environment:
-      REDIS_ARGS: "--save 60 1000"
-    restart: unless-stopped
+    # No port exposure - Redis only accessible within Docker network
+    restart: always
 
