@@ -18,16 +18,8 @@ async def get_global_chat(
     request: Request,
     limit: Annotated[int, Query(ge=1, le=100)] = 50,
 ) -> list[ChatResponse]:
+    # Public endpoint - anyone can view chat messages
     auth_header = request.headers.get("Authorization")
-    if not auth_header:
-        # Since middleware only protects /api, we must enforce here if we want private chat
-        # Return empty list or 401? Test expects 401.
-        # But wait, return type is list[ChatResponse], throwing JSONResponse might be issue if not handled as exception?
-        # FastAPI handles returning Response object from route returning model.
-        # But better to raise HTTPException to be cleaner.
-        from fastapi import HTTPException
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="auth_required")
-
     messages = _chat_service.get_messages(limit=limit, authorization=auth_header)
     return [ChatResponse(**msg) for msg in messages]
 
