@@ -34,7 +34,13 @@ class ChatService(Singleton):
     def get_messages(self, limit: int = 50, authorization: str | None = None) -> list[dict]:
         # Fetch all (limited in scale by TTL and practical usage for now)
         # Using Python sort to ensure reliability if Redis syntax fails
-        results = ChatEntity.find().all()
+        try:
+            results = ChatEntity.find().all()
+        except Exception as e:
+            print(f"[ChatService] Error fetching messages: {e}")
+            import traceback
+            traceback.print_exc()
+            results = []
         results.sort(key=lambda x: x.created_at, reverse=True)
         results = results[:limit]
         
